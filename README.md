@@ -1,84 +1,116 @@
-🚗 Smart Dynamic Parking Pricing with Real-Time Visualization
-📌 Project Overview
-This project implements an intelligent, real-time Dynamic Pricing System for urban parking spaces. Prices adjust dynamically based on:
-- Real-time demand patterns
-- Traffic conditions
-- Queue lengths
-- Special events
-- Vehicle types
-- Competitor proximity
-The system ensures that price updates are smooth, explainable, and reflect real-world scenarios. Optional rerouting suggestions for overburdened lots are also considered.
-🛠 Tech Stack
-- Python 3.x
-- Pandas – Data processing
-- Numpy – Numerical operations
-- Pathway – Real-time data streaming & computation
-- Bokeh – Interactive real-time visualizations
-- Panel – Dashboard integration
-🏗 System Architecture
-Conceptual workflow of the dynamic pricing system:
-Parking Data (Historical & Real-Time)
-              │
-      Streaming via Pathway
-              │
-      Data Preprocessing
- (Timestamp parsing, Feature engineering)
-              │
-      Dynamic Pricing Models
-    ┌─────────────┬─────────────┐
-Model 1: Linear   Model 2: Demand-Based
-              │
-  Real-Time Price Output
-              │
-     Bokeh Visualization
-              │
- Interactive Dashboard (Panel)
-⚙ Project Workflow
-⿡ Data Description:
-- 14 urban parking lots
-- 73 days of data
-- 18 time points daily (30-min intervals, 8:00 AM to 4:30 PM)
-Features:
-- Location: Latitude, Longitude
-- Capacity & Occupancy
-- Queue length
-- Vehicle Type: Car, Bike, Truck
-- Nearby traffic congestion
-- Special day indicators (holidays, events)
-⿢ Pricing Model Stages:
-✅ Model 1: Baseline Linear Price
-Price_t+1 = Price_t + α * (Occupancy / Capacity)
-✅ Model 2: Demand-Based Pricing
-Demand = α*(Occupancy/Capacity) + β*QueueLength - γ*Traffic + δ*SpecialDay + ε*VehicleTypeWeight
-Price_t = BasePrice * (1 + λ * NormalizedDemand)
-Prices are bounded (e.g., 0.5x to 2x Base Price) to ensure stability.
-📊 Visualization Examples
-- Real-time price trends per parking lot
-- Vehicle-type-specific price comparisons
-- Optional competitor price overlays
-- Seasonality patterns (e.g., weekday/weekend effects)
-📂 Project Structure
-.
-├── data/                  # Raw and processed data files
-├── notebooks/             # Experimentation and visualization notebooks
-├── src/                   # Core model and processing scripts
-├── README.md              # Project documentation (this file)
-└── requirements.txt       # Dependencies
-📄 Optional Documentation
-Technical reports, experimental results, and analysis PDFs can be added under a /docs directory.
-🚀 Getting Started
-1. Install dependencies:
-   pip install -r requirements.txt
-2. Run the pricing pipeline (script or notebook)
-3. Launch the Panel dashboard to monitor real-time visualizations
-💡 Future Enhancements
-- Rerouting suggestions for overburdened lots
-- More advanced demand modeling using temporal patterns
-- Competitor-aware pricing integration
-🤝 Contributions
-Feel free to fork this repo and open a pull request or issue!
-📄 License
-This project is open-source under the MIT License.
-🔗 Links
-- 📊 Live Dashboard (optional): https://your-dashboard-url.com
-- 📁 GitHub Repository: https://github.com/yourusername/your-repo
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dynamic Parking Pricing System</title>
+</head>
+<body>
+
+<h1>🚗 Dynamic Parking Pricing with Real-Time Visualization</h1>
+
+<p>
+A real-time dynamic pricing system for urban parking spaces, built entirely with <b>Python, Pandas, Numpy, Pathway, Bokeh, and Panel</b>. 
+The project uses streaming data from multiple parking lots to compute smart, adaptive prices based on real-time occupancy, demand, traffic, and seasonality.
+</p>
+
+<hr>
+
+<h2>📊 <u>Project Overview</u></h2>
+
+<ul>
+    <li>Real-time pricing for 14 urban parking spaces over 73 days of data.</li>
+    <li>Data sampled every 30 minutes between 8:00 AM and 4:30 PM.</li>
+    <li>Dynamic price adjustment based on occupancy, queue length, traffic, special events, vehicle type, and day-of-week seasonality.</li>
+    <li>Visualizations for each parking lot and vehicle category using <b>Bokeh</b>.</li>
+</ul>
+
+<hr>
+
+<h2>🛠 <u>Technology Stack</u></h2>
+
+<ul>
+    <li>Python 3</li>
+    <li>Pandas & Numpy (data processing)</li>
+    <li>Pathway (streaming data simulation and windowing)</li>
+    <li>Bokeh (interactive plots)</li>
+    <li>Panel (dashboard layout)</li>
+</ul>
+
+<hr>
+
+<h2>📦 <u>Project Architecture</u></h2>
+
+<p>The system simulates real-time parking data, applies different pricing models, and streams visual dashboards:</p>
+
+<pre>
+┌─────────────┐   Stream CSV per Lot   ┌─────────────┐   Compute Prices   ┌──────────────┐
+│  Parking    │  ───────────────────▶  │ Pathway     │  ───────────────▶  │ Bokeh Plots  │
+│  Lot Data   │                        │ Streaming   │                   │ + Panel UI   │
+└─────────────┘                        └─────────────┘                   └──────────────┘
+</pre>
+
+<hr>
+
+<h2>📐 <u>Pricing Models Implemented</u></h2>
+
+<h3>Model 1: Baseline Linear Pricing</h3>
+<ul>
+    <li>Price increases linearly with occupancy levels.</li>
+    <li>Formula: <code>Price = 10 + α * (MaxOccupancy - MinOccupancy) / Capacity</code></li>
+</ul>
+
+<h3>Model 2: Demand-Based Pricing with Seasonality</h3>
+<ul>
+    <li>Demand function includes occupancy, queue length, traffic, special events, vehicle type.</li>
+    <li>Smoothed seasonality introduced using a sine wave based on weekday.</li>
+    <li>Vehicle-specific price multipliers applied for cars, bikes, trucks, etc.</li>
+    <li>Final Formula:</li>
+</ul>
+
+<pre>
+NormalizedDemand = α·(Occupancy/Capacity) + β·QueueLength - γ·Traffic + δ·SpecialDay
+
+SeasonalityBoost = 0.1 * sin( (Weekday/6) * 2π )
+
+BasePrice = 10 * (1 + λ * NormalizedDemand)
+
+FinalPrice = BasePrice * VehicleWeight * (1 + SeasonalityBoost)
+</pre>
+
+<hr>
+
+<h2>📈 <u>Visualization Features</u></h2>
+
+<ul>
+    <li>Interactive, real-time line plots of price evolution per parking lot.</li>
+    <li>Separate plots for each vehicle type (car, bike, truck, etc.).</li>
+    <li>Comparison with baseline pricing for transparency.</li>
+</ul>
+
+<hr>
+
+<h2>📁 <u>Project Structure</u></h2>
+
+<ul>
+    <li><code>parking_stream_&lt;lot&gt;.csv</code>: Simulated stream data for each lot.</li>
+    <li><code>dynamic_pricing.py</code>: Main streaming, pricing, and visualization code.</li>
+    <li><code>README.html</code>: This project documentation.</li>
+</ul>
+
+<hr>
+
+<h2>💡 <u>Potential Future Extensions</u></h2>
+
+<ul>
+    <li>Incorporate competitor pricing for price optimization.</li>
+    <li>Vehicle rerouting suggestions when lots reach full capacity.</li>
+    <li>More complex seasonal patterns (e.g., monthly, event-based).</li>
+</ul>
+
+<hr>
+
+<h2>📝 <u>Contact</u></h2>
+
+<p>For questions or collaboration, please reach out via GitHub issues or email.</p>
+
+</body>
+</html>
