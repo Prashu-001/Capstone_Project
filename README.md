@@ -32,12 +32,13 @@ The project uses streaming data from multiple parking lots to compute smart, ada
 
 ## 🏗 Project Architecture
 
-mermaid
+```mermaid
 
 flowchart LR
     A[Parking Lot Data] -->|Stream CSV| B[Pathway Streaming Engine]
     B -->|Compute Prices| C[Bokeh Visualizations]
     C --> D[Panel Dashboard]
+```
 
 
 
@@ -85,7 +86,7 @@ FinalPrice = BasePrice * VehicleWeight * (1 + SeasonalityBoost)
 <hr>
 
 ## 🧉 Pricing Model Flow Diagram
-mermaid
+```mermaid
 graph TD
     A[Parking Lot Data Stream] --> B[Pathway Window Aggregation]
     B --> C[Model 1: Linear Pricing]
@@ -99,7 +100,7 @@ graph TD
     E --> I[Bokeh Visualizations]
     H --> I[Bokeh Visualizations]
     I --> J[Panel Dashboard]
-
+```
 
 
 <h2>📈 <u>Visualization Features</u></h2>
