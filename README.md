@@ -60,7 +60,7 @@ flowchart LR
 <h3>✅ Model 1: Baseline Pricing</h3>
 <p>The price increases with higher occupancy fluctuation, but smoothly — avoiding abrupt jumps due to the tanh function.</p>
 <pre>
-price = 10 + 5 * tanh(2 * ((pw.this.occ_max - pw.this.occ_min) / pw.this.cap))
+price = 10 + 5 * tanh(2 * ((Occupancy_max - Occupancy_min) / Capacity))
 </pre>
 
 <h3>✅ Model 2: Demand-Based Pricing with Seasonality according to the Special Days</h3>
@@ -87,7 +87,7 @@ Demand = (
                 traffic = ( 0.5 *ratio_high + 0.3 * ratio_avg + 0.1 * ratio_low )
                         # ratio_high = no.of high level traffic in that window/total count , similaly others
                 SpecialDay = 0 or 1.
-    
+<br>
 <b>Price = 10*(1 + 0.5*tanh(pw.this.Demand))</b>
 </pre>
 
@@ -97,13 +97,12 @@ Demand = (
 ```mermaid
 graph TD
     A[Parking Lot Data Stream] --> B[Pathway Window Aggregation]
-    B --> C[Model 1: Linear Pricing]
-    B --> D[Model 2: Demand-Based Pricing with Seasonality]
+    B --> C[Model 1: Baseline Pricing]
+    B --> D[Model 2: Demand-Based Pricing]
 
     C --> E[Base Price Computation]
     D --> F[Demand Calculation]
-    F --> G[Seasonality Boost using Sine Wave]
-    G --> H[Final Price with Vehicle Multiplier]
+    G --> H[Final Price]
 
     E --> I[Bokeh Visualizations]
     H --> I[Bokeh Visualizations]
@@ -136,11 +135,11 @@ graph TD
 <ul>
     <li>Incorporate competitor pricing for price optimization.</li>
     <li>Vehicle rerouting suggestions when lots reach full capacity.</li>
-    <li>More complex seasonal patterns (e.g., monthly, event-based).</li>
+    <li>More complex seasonal patterns (event-based).</li>
 </ul>
 
 <hr>
 
 <h2>📝 <u>Contact</u></h2>
 
-<p>For questions or collaboration, please reach out via GitHub issues or email.</p>
+<p>For questions or collaboration, please reach out via GitHub issues or prashu150603@gmail.com.</p>
