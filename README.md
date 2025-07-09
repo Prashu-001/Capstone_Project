@@ -122,11 +122,14 @@ graph TD
 
 <h2>📁 <u>Project Structure</u></h2>
 
-<ul>
-    <li><code>parking_stream_&lt;lot&gt;.csv</code>: Simulated stream data for each lot.</li>
-    <li><code>dynamic_pricing.py</code>: Main streaming, pricing, and visualization code.</li>
-    <li><code>README.html</code>: This project documentation.</li>
-</ul>
+```
+Capstone_Project/
+ ├── Bokeh_Plots/                 
+ │   └── Model1_plots/      
+ │   └── Model2_Plots/     
+ ├── Capstone_Project.ipynb            
+
+```
 
 <hr>
 
