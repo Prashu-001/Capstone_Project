@@ -102,7 +102,7 @@ graph TD
 
     C --> E[Base Price Computation]
     D --> F[Demand Calculation]
-    G --> H[Final Price]
+    F --> H[Final Price]
 
     E --> I[Bokeh Visualizations]
     H --> I[Bokeh Visualizations]
