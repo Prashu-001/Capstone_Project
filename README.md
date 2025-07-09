@@ -57,13 +57,13 @@ flowchart LR
 
 <h2>💵 Pricing Models Implemented</h2>
 
-<h3>✅ Model 1: Baseline Linear Pricing</h3>
-<p>Price increases linearly with occupancy levels.</p>
+<h3>✅ Model 1: Baseline Pricing</h3>
+<p>The price increases with higher occupancy fluctuation, but smoothly — avoiding abrupt jumps due to the tanh function.</p>
 <pre>
-Price = 10 + α * (MaxOccupancy - MinOccupancy) / Capacity
+price = 10 + 5 * tanh(2 * ((pw.this.occ_max - pw.this.occ_min) / pw.this.cap))
 </pre>
 
-<h3>✅ Model 2: Demand-Based Pricing with Seasonality</h3>
+<h3>✅ Model 2: Demand-Based Pricing with Seasonality according to the Special Days</h3>
 <p>Demand function incorporates:</p>
 <ul>
 <li>Occupancy</li>
@@ -72,15 +72,23 @@ Price = 10 + α * (MaxOccupancy - MinOccupancy) / Capacity
 <li>Special events</li>
 <li>Vehicle type</li>
 </ul>
-<p>Smooth weekly seasonality via sine wave on weekday. Vehicle-specific price multipliers for cars, bikes, trucks.</p>
 <pre>
-NormalizedDemand = α·(Occupancy/Capacity) + β·QueueLength - γ·Traffic + δ·SpecialDay
-
-SeasonalityBoost = 0.1 * sin( (Weekday / 6) * 2π )
-
-BasePrice = 10 * (1 + λ * NormalizedDemand)
-
-FinalPrice = BasePrice * VehicleWeight * (1 + SeasonalityBoost)
+Demand = (
+                0.4 * (occupancy_mean / (capacity + 1e-6)) +
+                0.3 * queue_ratio -
+                0.2 * traffic +
+                0.3 * SpecialDay +
+                0.15 * VehicleWeight
+            ),
+        where-
+                queue_ratio = log1p(QueueLength_mean),     # log(1 + x) dampens large values.
+                VehicleWeight = (0.5 * truck_ratio +0.3 * car_ratio + 0.2 * bike_ratio + 0.1 * cycle_ratio),
+                        #truck_ratio = no. of trucks / total vehicles  similarly car_ratiio ,bike ratio and cycle_ratio.
+                traffic = ( 0.5 *ratio_high + 0.3 * ratio_avg + 0.1 * ratio_low )
+                        # ratio_high = no.of high level traffic in that window/total count , similaly others
+                SpecialDay = 0 or 1.
+    
+<b>Price = 10*(1 + 0.5*tanh(pw.this.Demand))</b>
 </pre>
 
 <hr>
